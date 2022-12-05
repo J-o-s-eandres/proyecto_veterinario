@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patitas Sanas</title>
 
+    <link rel="stylesheet" href="./vendor/lightbox/css/lightbox.min.css">
+
     <script src="https://kit.fontawesome.com/044457a684.js" crossorigin="anonymous"></script>
 
 <!--  Boostrap 4.6 -->
@@ -21,21 +23,22 @@
 <h2 class="text-center mb-4">Módulo Mascotas</h2>
 
 <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-curso" id="mostrar-modal-registro">Registrar Mascota</button>
-<a href="charts/grafico-basico.php" class="btn btn-info">Resumen de Nacimientos de Mascotas</a>
+<a href="charts/grafico-basico.php" class="btn btn-info">Resumen de Mascotas</a>
 <a href="charts/grafico-escuela.php" class="btn btn-warning">Reporte de Mascotas vivas</a>
+<a href="charts/grafico-escuela.php" class="btn btn-info">Buscador</a>
 <hr>
 
 <div class="table-responsive">
-    <table class="table table-sm table-striped" id="tabla-cursos">
+    <table class="table table-sm table-striped" id="tabla-mascotas">
         <thead class="table-dark">
             <tr>
-                <th>#</th>
+                <!-- <th>#</th> -->
                 <th>Nombre Raza</th>
                 <th>Nombre Mascota</th>
                 <th>Fecha de Nacimiento</th>
                 <th>Peso</th>
                 <th>Color</th>
-                <th>Comandos</th>
+                <th>Fotografía</th>
             </tr>
         </thead>
         <tbody class="table-hover table-active"></tbody>
@@ -100,7 +103,7 @@
 
         <div class="modal-footer">
             <button type="button" class="btn btn-sm btn-secondary" id="cancelar-modal" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-sm btn-primary" id="guardar-curso">Guardar</button>
+            <button type="button" class="btn btn-sm btn-primary" id="guardar-mascota">Guardar</button>
         </div>
     </div>
 </div>
@@ -116,8 +119,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 <!-- Lightbox -->
-<script src="../vendor/lightbox/js/lightbox.min.js"></script>
+<!-- <script src="vendor/lightbox/js/lightbox.min.js"></script> -->
+<!-- <script src="vendor/lightbox/js/lightbox.min.js"></script> -->
 
+<!-- <script src="./vendor/lightbox/js/lightbox.min.js"></script> -->
+<script src="./vendor/lightbox/js/lightbox.min.js"></script>
 
   <!-- jQuery Mask  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -137,13 +143,75 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+
 <script>
-function listarMascotas() {
+//$('#fechainicio').mask('2022-00-00', {placeholder: 'yyyy-mm-dd'}); //placeholder
+$('#peso').mask('000.00', {placeholder: '000'}); //placeholder
+//$("#nombre").mask('Regex', {regex: "[a-zA-ZñÑá-úÁ-Úä-üÄ-Ü '-]{10}"});
+
+
+function mostrarMascotas() {
 
 $.ajax({
-    url: '../controllers/mascotas.controllers.php',
+    url :'controllers/mascotas.controllers.php',
+    type : 'GET',
+    data : 'operacion=listarMascotas',
+    success : function(result){
+        let registros = JSON.parse(result);
+        let nuevoFila=``;
+
+        console.log(result)
+        
+        
+        
+
+    
+        let tabla = $("#tabla-mascotas").DataTable();
+            tabla.destroy();
+
+        $("#tabla-mascotas tbody").html("");
+
+        registros.forEach(registro =>{
+           // numeroSerie = (registro['numeroSerie']==null): registro['numeroSerie'];
+            fotografia = (registro['fotografia']==null) ?'sin-imagen.jpg':registro['fotografia'];
+
+           // dificultad = registro['dificultad'] == null ? '' : registro['dificultad'];
+// <a href='views/images/mascotas/${fotografia}'
+//  <a href='views/images/mascotas/${fotografia}'
+            let nuevaFila =`
+                <tr>
+                <td>${registro['nombreRaza']}</td>
+                <td>${registro['nombre']}</td>
+                <td>${registro['fechaNac']}</td>
+                <td>${registro['peso']}</td>
+                <td>${registro['color']}</td>
+                <td>
+                    <a href='./views/images/mascotas/${fotografia}'
+                    data-lightbox='demo' 
+                    data-title='${registro['nombre']}'
+                    class='btn btn-sm btn-warning' 
+                    title='Mostrar foto de la mascota'><i class='fa-solid fa-eye'></i></a>
+                    </td>
+                </tr>
+            `;
+            $("#tabla-mascotas tbody").append(nuevaFila);
+            
+        })//fin forEach
+        $('#tabla-mascotas').DataTable({
+            language:{ 
+                url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-MX.json'
+            }
+        });//fin DataTable
+    }//fin success
+});// $.ajax
+}//fin de la función mostrarCuros()
+
+
+function listarRazas() {
+$.ajax({
+    url: 'controllers/mascotas.controllers.php',
     type: 'GET',
-    data: 'operacion=listarMascotas',
+    data: 'operacion=listarRazas',
     success: function(result){
         let registros = JSON.parse(result);
         let elementosLista = ``;
@@ -164,8 +232,69 @@ $.ajax({
 
 }//fin de la función listarEscuelas() 
 
+ // Reiniciara el formulario 
+function reiniciarformulario() {
+                $("#formulario-cursos")[0].reset();
 
-listarMascotas()
+            }//fin de la función reiniciarformulario()
+
+
+function registrarMascotaBin(){
+                //1. Validación
+
+                //2. Crear un objeto FormData(reemplazara al array asociativo)
+            if(confirm("¿Está seguro de guardar?")){
+                    var formdata = new FormData();
+                
+                
+                //3. Enviando parámetros
+                formdata.append("operacion","registrarMascotas");
+                formdata.append("idraza",$("#razas").val());
+                formdata.append("nombre",$("#nombre").val());
+                formdata.append("fechaNac",$("#fechaNac").val());
+                formdata.append("peso",$("#peso").val());
+                formdata.append("color",$("#color").val());
+                
+                // formdata soporta objetos binarios
+                formdata.append("fotografia", $("#fotografia")[0].files[0]);
+
+                
+                //4. Enviar datos por AJAX
+                $.ajax({
+                    url:'controllers/mascotas.controllers.php',
+                    type:'POST',
+                    data: formdata,
+                    contentType:false,
+                    processData : false,
+                    cache:false,
+                    success : function(result){
+                            console.log(result);
+                            if(result == ""){
+                                // Confirmar envio
+                                alert("Proceso terminado correctamente");
+
+                                // Reconstruir DataTable
+                                mostrarMascotas();
+                                
+                                // Reiniciar el formulario a su estado original 
+                                reiniciarformulario();
+                               //cerrar modal 
+                            $("#modal-mascotas").modal("hide");
+                        } //fin if
+                    }//fin success
+                });// fin ajax
+            }        //fin if confirm
+        }// fin función registrarCursoBin
+
+
+        $("#guardar-mascota").click(registrarMascotaBin);
+
+
+
+
+
+mostrarMascotas()
+listarRazas()
 </script>
 </body>
 </html>

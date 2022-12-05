@@ -53,6 +53,20 @@ CALL spu_listarMascotas();
 
 
 
+DELIMITER $$ 
+CREATE PROCEDURE spu_listarRazas()
+BEGIN 
+
+SELECT * FROM razas;
+
+END $$
+
+CALL spu_listarRazas();
+CALL spu_listarMascotas();
+
+
+
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_mascota_registrar(
@@ -72,6 +86,5 @@ BEGIN
 END $$
 
 
-CALL spu_mascota_registrar(4,'Fifí','2018-05-11',2.4,'negro','');
-
+CALL spu_mascota_registrar(4,'Fifí','2018-05-11',2.4,'negro','ebdifsiodhfounhaof');
 

@@ -19,7 +19,7 @@ class Mascotas extends Conexion
     }
 
 
-    function listarMascotas(){
+    public function listarMascotas(){
         try{
             //se Prepara la Consulta
             $consulta = $this->acceso->prepare("CALL spu_listarMascotas()");
@@ -39,6 +39,49 @@ class Mascotas extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function registrarMascotas($datosGuardar){
+        try {
+            $consulta = $this->acceso->prepare(" CALL spu_mascota_registrar(?,?,?,?,?,?)");
+
+            $consulta->execute(array(
+                $datosGuardar['idraza'],
+                $datosGuardar['nombre'],
+                $datosGuardar['fechaNac'],
+                $datosGuardar['peso'],
+                $datosGuardar['color'],
+                $datosGuardar['fotografia']
+            ));
+            //no retorna datos
+        
+        
+        }catch(Exception $e){
+            die($e->getMessage());
+
+        }
+
+
+
+    }
+
+
+
+    public function listarRazas(){
+        try{
+            $consulta = $this->acceso->prepare("CALL spu_listarRazas()");
+
+            $consulta->execute();
+
+            $datos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+            return $datos;
+
+
+        }catch(Exception $e) {
+            die($e->getMessage());
+        
+        }
+    }
+
 }
 
 ?>
