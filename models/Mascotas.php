@@ -57,14 +57,8 @@ class Mascotas extends Conexion
         
         }catch(Exception $e){
             die($e->getMessage());
-
         }
-
-
-
     }
-
-
 
     public function listarRazas(){
         try{
@@ -81,6 +75,43 @@ class Mascotas extends Conexion
         
         }
     }
+
+
+    public function getResumenMascotas(){
+        try {
+            $consulta = $this->acceso->prepare("CALL spu_mascotas_q_nacimiento()");
+
+            $consulta->execute();
+
+            return  $consulta->fetchAll(PDO::FETCH_ASSOC);
+            
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        
+        }
+
+    }
+
+
+    public function buscarNombre($nombre){
+        try {
+            $consulta = $this->acceso->prepare("CALL spu_mascotas_buscar_nombre(?)");
+
+            $consulta->execute(array($nombre));
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+            
+        }
+    }
+
+
+
+
 
 }
 

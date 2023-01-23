@@ -6,26 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patitas Sanas</title>
 
+    <!-- Ligtbox -->
     <link rel="stylesheet" href="./vendor/lightbox/css/lightbox.min.css">
 
+    <!-- Fontawesome -->
     <script src="https://kit.fontawesome.com/044457a684.js" crossorigin="anonymous"></script>
 
-<!--  Boostrap 4.6 -->
+    <!--  Boostrap 4.6 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- Table -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
-<!-- Table -->
-<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 </head>
 <body>
 <div class="mt-2" style='width: 95%; margin: 0 auto;'>
 
 <h2 class="text-center mb-4">Módulo Mascotas</h2>
 
-<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-curso" id="mostrar-modal-registro">Registrar Mascota</button>
-<a href="charts/grafico-basico.php" class="btn btn-info">Resumen de Mascotas</a>
-<a href="charts/grafico-escuela.php" class="btn btn-warning">Reporte de Mascotas vivas</a>
-<a href="charts/grafico-escuela.php" class="btn btn-info">Buscador</a>
+<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-mascota" id="mostrar-modal-registro">Registrar Mascota</button>
+<a target="_blank"   id="mostrarMascotas" class="btn btn-info">Mostrar todas las Mascotas</a>
+<a target="_blank"  href="./views/charts/grafico3.php" class="btn btn-info">Resumen de Mascotas</a>
+<a target="_blank"  href="./reports/reporte.php" class="btn btn-warning">Reporte de Mascotas vivas</a>
+<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-buscador-mascota" id="mostrar-modal-registro">Buscar Mascota</button>
+
 <hr>
 
 <div class="table-responsive">
@@ -48,12 +52,12 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="modal-curso" tabindex="-1" aria-labelledby="titulo-modal-productos" aria-hidden="true">
+<!-- Modal registrar Mascotas-->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="modal-mascota" tabindex="-1" aria-labelledby="titulo-modal" aria-hidden="true">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header bg-primary text-light">
-            <h5 class="modal-title" id="titulo-modal-cursos">Registro de Mascotas</h5>
+            <h5 class="modal-title" id="titulo-modal-mascota">Registro de Mascotas</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span class="text-light" aria-hidden="true">&times;</span>
             </button>
@@ -63,7 +67,7 @@
 
             <!-- Formulario de registro de Cursos -->
             <!-- enctype="multipart/form-data esto le permite al formulario enviar binarios -->
-            <form  id="formulario-cursos" autocomplete="off" enctype="multipart/form-data">
+            <form  id="formulario-mascota" autocomplete="off" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="razas">Razas:</label>
                     <select name="razas" id="razas" class="form-control form-control-sm">
@@ -110,19 +114,48 @@
 </div>
 
 
+<!-- Modal Buscador -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="modal-buscador-mascota" tabindex="-1" aria-labelledby="titulo-modal-buscar-mascotas" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-light">
+            <h5 class="modal-title" id="titulo-modal-mascotas">Buscar Mascotas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span class="text-light" aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
+        <div class="modal-body">
+
+            <form  id="formulario-mascota-buscador" autocomplete="off" >
+                
+                <div class="form-group">
+                    <label for="titulo">Nombre Mascota:</label>
+                    <input type="text" class="form-control form-control-sm" id="nombre-busc">
+                </div>
+
+                
+                <!-- Fin del formulario -->
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" id="cancelar-modal-buscar" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-sm btn-primary" id="buscar-mascota">Buscar</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!-- fin Modal Buscador -->
 
 
 
   <!-- Libreria jQuery -->
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 <!-- Lightbox -->
-<!-- <script src="vendor/lightbox/js/lightbox.min.js"></script> -->
-<!-- <script src="vendor/lightbox/js/lightbox.min.js"></script> -->
-
-<!-- <script src="./vendor/lightbox/js/lightbox.min.js"></script> -->
 <script src="./vendor/lightbox/js/lightbox.min.js"></script>
 
   <!-- jQuery Mask  -->
@@ -131,10 +164,10 @@
 <!-- Boostrap 4.6 -->
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
 <!-- Datatable -->
-
 <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
 
@@ -145,13 +178,68 @@
 
 
 <script>
-//$('#fechainicio').mask('2022-00-00', {placeholder: 'yyyy-mm-dd'}); //placeholder
+    //solo acepta números
 $('#peso').mask('000.00', {placeholder: '000'}); //placeholder
-//$("#nombre").mask('Regex', {regex: "[a-zA-ZñÑá-úÁ-Úä-üÄ-Ü '-]{10}"});
+
+
+
+function buscarNombre(){
+    let nombreMascota = $("#nombre-busc").val();
+
+    $.ajax({
+    url :'controllers/mascotas.controllers.php',
+    type : 'GET',
+    data : {'operacion':'buscarNombre','nombre':nombreMascota},
+    success : function(result){
+        let registros = JSON.parse(result);
+        let nuevoFila=``;
+
+        
+        let tabla = $("#tabla-mascotas").DataTable();
+            tabla.destroy();
+
+            $("#tabla-mascotas tbody").html("");
+
+            registros.forEach(registro =>{
+            
+                console.log(registro)
+
+            fotografia = (registro['fotografia']==null) ?'sin-imagen.jpg':registro['fotografia'];
+            let nuevaFila =`
+                <tr>
+                <td>${registro['nombreRaza']}</td>
+                <td>${registro['nombre']}</td>
+                <td>${registro['fechaNac']}</td>
+                <td>${registro['peso']}</td>
+                <td>${registro['color']}</td>
+                <td>
+                    <a href='./views/images/mascotas/${fotografia}'
+                    data-lightbox='demo' 
+                    data-title='${registro['nombre']}'
+                    class='btn btn-sm btn-warning' 
+                    title='Mostrar foto de la mascota'><i class='fa-solid fa-eye'></i></a>
+                    </td>
+                </tr>
+            `;
+            $("#tabla-mascotas tbody").append(nuevaFila);
+            
+        })//fin forEach
+        $("#modal-buscador-mascota").modal("hide");
+        reiniciarBuscar();
+
+        $('#tabla-mascotas').DataTable({
+            language:{ 
+                url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-MX.json'
+            }
+        });//fin DataTable
+
+       }
+    }) //fin ajax
+
+}
 
 
 function mostrarMascotas() {
-
 $.ajax({
     url :'controllers/mascotas.controllers.php',
     type : 'GET',
@@ -162,22 +250,15 @@ $.ajax({
 
         console.log(result)
         
-        
-        
-
-    
         let tabla = $("#tabla-mascotas").DataTable();
             tabla.destroy();
 
         $("#tabla-mascotas tbody").html("");
 
         registros.forEach(registro =>{
-           // numeroSerie = (registro['numeroSerie']==null): registro['numeroSerie'];
             fotografia = (registro['fotografia']==null) ?'sin-imagen.jpg':registro['fotografia'];
 
-           // dificultad = registro['dificultad'] == null ? '' : registro['dificultad'];
-// <a href='views/images/mascotas/${fotografia}'
-//  <a href='views/images/mascotas/${fotografia}'
+
             let nuevaFila =`
                 <tr>
                 <td>${registro['nombreRaza']}</td>
@@ -230,13 +311,28 @@ $.ajax({
 }
 })
 
-}//fin de la función listarEscuelas() 
+}//fin de la función listarRazas() 
 
  // Reiniciara el formulario 
 function reiniciarformulario() {
-                $("#formulario-cursos")[0].reset();
+        $("#formulario-mascota")[0].reset();
+ }//fin de la función reiniciarformulario()
 
-            }//fin de la función reiniciarformulario()
+$("#modal-buscador-mascota").on('shown.bs.modal', function () {
+         $("#nombre-busc").focus()
+    });
+
+$("#formulario-mascotas").on("submit",function(evt){
+            evt.preventDefault();
+        });
+
+$("#formulario-mascota-buscador").on("submit",function(evt){
+            evt.preventDefault();
+        });
+
+function reiniciarBuscar(){
+    $("#formulario-mascota-buscador")[0].reset();
+}
 
 
 function registrarMascotaBin(){
@@ -279,7 +375,7 @@ function registrarMascotaBin(){
                                 // Reiniciar el formulario a su estado original 
                                 reiniciarformulario();
                                //cerrar modal 
-                            $("#modal-mascotas").modal("hide");
+                            $("#modal-mascota").modal("hide");
                         } //fin if
                     }//fin success
                 });// fin ajax
@@ -288,6 +384,10 @@ function registrarMascotaBin(){
 
 
         $("#guardar-mascota").click(registrarMascotaBin);
+        $("#mostrarMascotas").click(mostrarMascotas);
+        $("#buscar-mascota").click(buscarNombre);
+        $("#cancelar-modal-buscar").click(reiniciarBuscar);
+        $("#cancelar-modal").click(reiniciarformulario);
 
 
 

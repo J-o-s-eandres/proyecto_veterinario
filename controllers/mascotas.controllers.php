@@ -12,6 +12,17 @@ if (isset($_GET['operacion'])) {
     if ($_GET['operacion'] == 'listarRazas') {
         echo json_encode($mascota->listarRazas());
     }
+
+    if ($_GET['operacion'] == 'getResumenMascotas') {
+        echo json_encode($mascota->getResumenMascotas());
+    }
+
+    if ($_GET['operacion'] == 'buscarNombre') {
+        echo json_encode($mascota->buscarNombre($_GET['nombre']));
+    }
+
+
+
 }
 
 
